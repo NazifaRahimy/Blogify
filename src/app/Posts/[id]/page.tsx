@@ -1,7 +1,7 @@
 import Link from "next/link";
-
+import { Metadata } from "next";
 interface PropId {
-  params: { id: string };
+  params: { id: string};
 }
 
 interface Post {
@@ -11,6 +11,17 @@ interface Post {
     body: string;
 }
 
+
+export async function generateMetadata({ params }: PropId): Promise<Metadata> {
+    const {id} = await params
+const res = await fetch(`https://jsonplaceholder.typicode.com/posts/${Number(id)}`);
+const Posts = await res.json();
+
+return {
+title:{ absolute: Posts.title},
+ description: `Read the full post titled . Written by userId}.`
+};
+}
 const PostDetails = async ({ params }: PropId) => {
     const {id} = await params
     const res = await fetch(`https://jsonplaceholder.typicode.com/posts/${Number(id)}`);
@@ -33,3 +44,4 @@ const PostDetails = async ({ params }: PropId) => {
 };
 
 export default PostDetails;
+
