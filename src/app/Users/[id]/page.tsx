@@ -1,14 +1,18 @@
 import Link from "next/link";
- 
-interface Post {
-    userId: number;
-    id: number;
-    title: string;
-    body: string;
-}
-
+import { Metadata } from "next";
 interface PropId {
     params: { id: string };
+}
+
+export async function generateMetadata ({params}: PropId) : Promise<Metadata> {
+   const {id} = await params
+   const res = await fetch(`https://jsonplaceholder.typicode.com/users/${Number(id)}`)
+   const user =  await res.json()
+   return {
+     title:{ absolute : user.name},
+     description: `Profile details and information about ${user.name}, including email, address, and company details.`,
+  
+   }
 }
 
 interface UserProps {
